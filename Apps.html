@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glassmorphic Code Editor with Preview</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/monokai.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/lint/lint.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/lint/lint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/lint/javascript-lint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jshint/2.13.4/jshint.min.js"></script>
+
+
+    <link rel="stylesheet" href="Apps.css">
+</head>
+<body>
+
+    <div class="toggle-container">
+        <input type="checkbox" id="toggle-nav">
+        <label for="toggle-nav" class="toggle-label"></label>
+      </div>
+      
+      
+      <nav id="navbar">
+        <ul>
+          <li><a href="../HomePage/Home_Page.html" title="Home">Home</a></li>
+          <li><a href="Apps.html" title="Apps"class="active">Apps</a></li>
+          <li><a href="../CyclicTheory/Cyclic_Theory.html" title="Cyclic Theory">Cyclic Theory</a></li>
+          <li><a href="../AI/AI.html" title="AI">AI</a></li>
+          <li><a href="../Education/Education.html" title="Education" >Education</a></li>
+          <li><a href="../Finance/Finance.html" title="Finance">Finance</a></li>
+          <li><a href="../About/About.html" title="About">About</a></li>
+        </ul>
+      </nav>
+      
+    <header>
+        <h1>✨ Live Web Code Editor & Preview</h1>
+    </header>
+
+    <div class="glass-container">    
+<!-- Switch for word wrap -->
+<label class="switch">
+    <input type="checkbox" id="word-wrap-switch">
+    <span class="slider"></span>
+</label>
+<span id="switch-label">Word Wrap: Off</span>
+
+  <script>
+    const wordWrapSwitch = document.getElementById('word-wrap-switch');
+    const switchLabel = document.getElementById('switch-label');
+
+    wordWrapSwitch.addEventListener('change', function() {
+        if (wordWrapSwitch.checked) {
+            switchLabel.textContent = 'Word Wrap: On';
+        } else {
+            switchLabel.textContent = 'Word Wrap: Off';
+        }
+    });
+</script>
+    </div>
+
+
+
+
+    <div class="editor">
+        <div class="editor-tab">
+            <div class="editor-title">HTML</div>
+            <div class="editor-container" id="html-drop-area">
+                <textarea id="htmlCode" placeholder="Write HTML here"></textarea>
+                <div class="drop-overlay">Drop HTML file here</div>
+            </div>
+            <div class="editor-buttons">
+                <div class="left-buttons">
+                    <button onclick="copyToClipboard('htmlCode')">Copy</button>
+                    <button onclick="pasteCode('html')">Paste</button>
+                </div>
+                <div class="right-buttons">
+                    <input type="file" id="html-upload" class="upload-btn" accept=".html" onchange="uploadFile(event, 'html')">
+                    <label for="html-upload">Upload</label>
+                    <button onclick="clearEditor('htmlCode')">Clear</button>
+                </div>
+            </div>
+        </div>
+        <div class="editor-tab">
+            <div class="editor-title">CSS</div>
+            <div class="editor-container" id="css-drop-area">
+                <textarea id="cssCode" placeholder="Write CSS here"></textarea>
+                <div class="drop-overlay">Drop CSS file here</div>
+            </div>
+            <div class="editor-buttons">
+                <div class="left-buttons">
+                    <button onclick="copyToClipboard('cssCode')">Copy</button>
+                    <button onclick="pasteCode('css')">Paste</button>
+                </div>
+                <div class="right-buttons">
+                    <input type="file" id="css-upload" class="upload-btn" accept=".css" onchange="uploadFile(event, 'css')">
+                    <label for="css-upload">Upload</label>
+                    <button onclick="clearEditor('cssCode')">Clear</button>
+                </div>
+            </div>
+        </div>
+        <div class="editor-tab">
+            <div class="editor-title">JavaScript</div>
+            <div class="editor-container" id="js-drop-area">
+                <textarea id="jsCode" placeholder="Write JavaScript here"></textarea>
+                <div class="drop-overlay">Drop JS file here</div>
+            </div>
+            <div class="editor-buttons">
+                <div class="left-buttons">
+                    <button onclick="copyToClipboard('jsCode')">Copy</button>
+                    <button onclick="pasteCode('js')">Paste</button>
+                </div>
+                <div class="right-buttons">
+                    <input type="file" id="js-upload" class="upload-btn" accept=".js" onchange="uploadFile(event, 'js')">
+                    <label for="js-upload">Upload</label>
+                    <button onclick="clearEditor('jsCode')">Clear</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls-container">
+        
+   
+        <div class="preview-controls">
+            <label for="preview-width">Preview Size:</label>
+            <input type="number" id="preview-width" value="1000" min="100"> ×
+            <input type="number" id="preview-height" value="450" min="100">
+        </div>
+        
+    </div>
+
+    <div class="preview-title-bar">
+        <h2>Preview:</h2>
+    </div>
+    <!-- Begin new preview wrapper -->
+    <div id="preview-wrapper">
+        <iframe id="preview-window">Preview</iframe>
+        <button id="fullscreen-btn">⛶</button>
+    </div>
+    <!-- End preview wrapper -->
+
+    <div class="controls-container">
+        <div class="title-controls">
+            <label for="zip-title">Save Your Zip file as:</label>
+            <input type="text" id="zip-title" placeholder="Enter title here" value="My First Website" />
+        </div> 
+        
+    <div class="buttons">
+        <button id="download-btn" style="display: block; margin: 0 auto;">Download as ZIP</button>   
+    </div>
+    </div>
+
+  
+        <div class="notice-box">
+            <div style="text-align: center;">
+                <strong>Important Notice:<br></strong>
+            </div>
+            If you name your Zip file as: <code>Your-Zip-Name.zip</code>            <br><br>
+            Link your HTML code to your CSS and JS as: <br><br>
+            CSS: <code><a>link rel="stylesheet" href="Your-Zip-Name.css"</a></code>
+            <br>
+            JS: <code><a>script src="Your-Zip-Name.js"</a></code> <br><br>
+            Because your downloaded zip file's content will be saved as : <br> Your-Zip-Name.html<br>Your-Zip-Name.css<br>Your-Zip-Name.js
+            <br>
+            <br>
+            Preview Size is customizable only on Desktop Mode (or on Bigger screens)
+
+        </div>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="Apps.js"></script>
+    <script>
+        function setDefaultPreviewSize() {
+            const previewWidthInput = document.getElementById('preview-width');
+            const previewHeightInput = document.getElementById('preview-height');
+    
+            if (window.innerWidth <= 800) { // Check if the screen width is 600px or less
+                previewWidthInput.value = 350;
+                previewHeightInput.value = 250;
+                previewWidthInput.disabled = true; // Disable input for smartphone users
+                previewHeightInput.disabled = true; // Disable input for smartphone users
+            } else {
+                previewWidthInput.value = 1000;
+                previewHeightInput.value = 563; // Updated to 563 for 16:9 ratio
+                previewWidthInput.disabled = false; // Enable input for larger screens
+                previewHeightInput.disabled = false; // Enable input for larger screens
+            }
+    
+            updatePreviewWindow(); // Update the preview window size
+        }
+    
+        function updatePreviewWindow() {
+            const previewWindow = document.getElementById('preview-window');
+            const width = document.getElementById('preview-width').value;
+            const height = document.getElementById('preview-height').value;
+    
+            previewWindow.style.width = width + 'px';
+            previewWindow.style.height = height + 'px';
+        }
+    
+        // Call the function on page load
+        window.addEventListener('load', setDefaultPreviewSize);
+    
+        // Optionally, call the function on window resize to dynamically adjust the values
+        window.addEventListener('resize', setDefaultPreviewSize);
+    
+        // Update preview window when user changes the input values
+        document.getElementById('preview-width').addEventListener('input', updatePreviewWindow);
+        document.getElementById('preview-height').addEventListener('input', updatePreviewWindow);
+    </script>
+    
+    <script>
+      // Navigation Toggle Functionality
+      const toggleNav = document.getElementById('toggle-nav');
+      const navbar = document.getElementById('navbar');
+    
+      function toggleNavbar() {
+        navbar.style.display = toggleNav.checked ? 'flex' : 'none';
+      }
+    
+      // Toggle nav on checkbox change
+      toggleNav.addEventListener('change', toggleNavbar);
+    
+     
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    const navLinks = document.querySelectorAll('nav ul li a');
+  
+
+    let currentIndex = Array.from(navLinks).findIndex(link => link.classList.contains('active'));
+
+
+    function hoverTabs(direction) {
+        navLinks[currentIndex].classList.remove('hover');
+        currentIndex = (currentIndex + direction + navLinks.length) % navLinks.length;
+        navLinks[currentIndex].classList.add('hover');
+        playSound();
+    }
+
+    function switchTab() {
+        if (!window.popupVisible) { // Only switch tab if popup is not visible
+            navLinks.forEach(link => link.classList.remove('active'));
+            navLinks[currentIndex].classList.add('active');
+            window.location.href = navLinks[currentIndex].href;
+        }
+    }
+
+    // Removed the keydown event listener to stop handling keyboard inputs
+    // Keeping the other logic intact
+
+    navLinks[currentIndex].classList.add('hover');
+});
+
+    </script>
+    
+    
+</body>
+</html>

@@ -1,0 +1,635 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  background:rgb(41, 58, 246) ;
+  background-size: 300% 300%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  padding: 20px;    
+  background: url('https://res.cloudinary.com/ds4uqa17r/image/upload/v1743117225/refined-round-disk_unc21k.png') no-repeat center center fixed; /* Background image */
+  background-size: cover; /* Cover the entire viewport */
+  color: #fcfcfc;
+  align-items: center;
+}
+
+
+
+/* Optional: You might want to add a semi-transparent overlay to enhance readability */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+  z-index: 1; /* Position it above the background */
+}
+
+/* Ensure your main content is above the overlay */
+.container {
+  position: relative;
+  z-index: 2; /* This makes sure the content appears above the overlay */
+}
+
+
+header {
+  text-align: center;
+  margin: 20px 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 20px 40px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-size: 2.5rem;
+  background: linear-gradient(to right, #fff, #e0e0e0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.editor {
+  width: 95%;
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.editor-tab {
+  position: relative;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-title {
+  background: rgba(39, 14, 14, 0.2);
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  color: #fff;
+}
+
+.editor-buttons {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.left-buttons, .right-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.upload-btn {
+  display: none;
+}
+
+.right-buttons label {
+  background: red;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.right-buttons label:hover {
+  background: rgba(255, 0, 0, 0.8);
+}
+
+.editor-buttons button {
+  background: red;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+editor-buttons button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+textarea {
+  width: 100%;
+  height: 300px;
+  border: none;
+  padding: 5px;
+  outline: none;
+  resize: vertical;
+  font-family: 'Courier New', Courier, monospace;
+  background: rgba(30, 30, 30, 0.9);
+  color: #d4d4d4;
+  font-size: 14px;
+}
+
+.controls-container {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  width: 95%;
+  margin: 20px 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+input[type="text"], input[type="number"] {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px 15px;
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+}
+
+#preview-wrapper {
+    position: relative; /* Added to establish containing block for absolute positioning */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1000px; /* Optional: limit maximum width on large screens */
+    margin: 20px auto; /* Center horizontally with vertical spacing */
+}
+
+#preview-window {
+  width: 100%;
+  height: 450px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.buttons {
+  margin: 20px 0;
+}
+
+#download-btn {
+  background: red;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+#download-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Add this to your existing CSS file */
+
+/* Media query for smaller screens */
+@media (max-width: 600px) {
+  .controls-container {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+
+  .title-controls, .preview-controls {
+      width: 100%;
+      margin-bottom: 10px;
+  }
+
+  .title-controls label, .preview-controls label {
+      display: block;
+      margin-bottom: 5px;
+  }
+
+  .title-controls input, .preview-controls input {
+      width: calc(100% - 20px); /* Adjust width to fit within container */
+  }
+
+  .preview-controls input[type="number"] {
+      width: calc(50% - 10px); /* Adjust width for number inputs */
+  }
+  .notice-box {
+      width: 94%;
+      margin: 20px auto;
+      font-size: 14px;
+  }
+}
+
+/* Glassmorphic container for word wrap switch */
+.glass-container {
+  background: rgba(255, 255, 255, 0.15); /* Light, transparent background */
+  border-radius: 15px; /* Rounded corners */
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+  backdrop-filter: blur(10px); /* The blur effect for the glass look */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Slightly transparent border */
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+#switch-label {
+  color: white;
+  font-size: 16px;
+}
+/* Title bar above preview */
+.preview-title-bar {
+  background: rgba(255, 255, 255, 0.1); /* Glassmorphic effect */
+  backdrop-filter: blur(10px); /* Blur background */
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  margin-bottom: 10px; /* Space between title bar and iframe */
+}
+
+.preview-title-bar h2 {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  color: #fff; /* White text color */
+}
+.notice-box {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    margin: 20px 0;
+    color: #ffffff;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.8;
+    letter-spacing: 0.3px;
+}
+
+.notice-box strong {
+    color: #ff3d3d;
+    font-size: 1.3em;
+    font-weight: 800;
+    display: block;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.notice-box code {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    color: #7fff00;
+    font-size: 0.95em;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.notice-box br {
+    content: "";
+    display: block;
+    margin: 12px 0;
+}
+
+/* Media query for smartphones */
+@media (max-width: 600px) {
+  /* Responsive adjustments */
+  body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: url('https://res.cloudinary.com/ds4uqa17r/image/upload/v1743117225/refined-round-disk_unc21k.png') no-repeat center center fixed;
+      background-size: cover;
+      background-color: #000; /* Fallback background color */
+      padding: 0; /* Remove padding to fix spacing issue */
+      
+    }
+  
+  
+
+  .editor {
+      flex-direction: column; /* Stack editors vertically on small screens */
+      gap: 10px; /* Reduce gap for smaller screens */
+  }
+
+  .editor-tab {
+      height: auto; /* Allow height to adjust based on content */
+  }
+
+  textarea {
+      height: 200px; /* Reduce height for smaller screens */
+  }
+
+  .controls-container {
+      flex-direction: column; /* Stack controls vertically */
+      align-items: flex-start; /* Align items to the start */
+      gap: 10px; /* Add gap between controls */
+  }
+
+  input[type="text"], input[type="number"] {
+      width: 100%; /* Full width for inputs */
+      margin-bottom: 10px; /* Space between inputs */
+  }
+
+  #preview-window {
+      width: 100%; /* Full width for preview */
+      height: 300px; /* Reduce height for smaller screens */
+  }
+
+  .buttons {
+      display: flex;
+      justify-content: center; /* Center buttons */
+      width: 100%; /* Full width for buttons */
+  }
+
+  #download-btn {
+      width: 100%; /* Full width for button */
+      padding: 10px; /* Adjust padding */
+  }
+
+  h1 {
+      font-size: 1.5rem; /* Smaller font size for header */
+  }
+
+  .editor-buttons button {
+      padding: 5px; /* Smaller padding for buttons */
+  }
+
+  .notice-box {
+      font-size: 14px; /* Smaller font size for notice */
+  }
+}
+/* For the toggle button */
+#navbar {
+  display: none; /* Hidden by default */
+}
+
+.toggle-container {
+  position: absolute;
+  top: calc(75px + 0.7in);
+  left: 2px;
+  z-index: 2000; /* Ensure the toggle button stays above the navbar */
+}
+
+input[type="checkbox"] {
+  height: 0;
+  width: 0;
+  display: none;
+}
+
+/* Hamburger Menu Style */
+.toggle-label {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 89%;
+  position: relative;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+input[type="checkbox"]:checked + .toggle-label {
+  background: rgba(255, 3, 3, 0.595); /* Change background to red when checked */
+}
+
+.toggle-label::before,
+.toggle-label::after,
+.toggle-label span {
+  content: '';
+  position: absolute;
+  left: 10px;
+  height: 2px;
+  width: 20px;
+  background: #eeeaea;
+  transition: all 0.3s ease;
+}
+
+
+.toggle-label::before {
+  top: 12px;
+}
+
+.toggle-label span {
+  top: 19px;
+}
+
+.toggle-label::after {
+  top: 26px;
+}
+
+/* When toggled */
+input:checked + .toggle-label {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+input:checked + .toggle-label::before {
+  transform: translateY(7px) rotate(45deg);
+}
+
+input:checked + .toggle-label span {
+  opacity: 0;
+}
+
+input:checked + .toggle-label::after {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Hover effect */
+.toggle-label:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+nav {
+  position: absolute;
+  top: 122px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+}
+
+nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px) saturate(180%);
+  border-radius: 20px;
+  padding: 10px;
+  justify-content: center;
+  gap: 10px;
+}
+
+nav ul li {
+  margin: 5px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #000000;
+  font-size: 1rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  padding: 10px 20px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  transition: background-color 0.3s ease, border 0.3s ease;
+  cursor: pointer; /* Make cursor a pointer */
+}
+
+nav ul li a:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+nav ul li a.active {
+  background-color: rgb(0, 0, 0); /* Plain black background */
+  color: rgba(252, 252, 252, 0.748); /* White text color */
+  border: 2px solid black; /* Black border for consistency */
+}
+
+nav ul li a.hover {
+  background-color: rgba(255, 255, 255, 0.3); /* Different background color for hover state */
+  border: 2px solid rgba(255, 255, 255, 0.8); /* Dark white thick border */
+}
+
+#fullscreen-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.3s ease;
+    z-index: 10;
+}
+
+#preview-wrapper:hover #fullscreen-btn {
+    opacity: 1; /* Visible on hover */
+}
+
+.editor-container {
+    position: relative;
+    flex: 1;
+    transition: 0.3s ease-in-out;
+}
+
+.editor-container.dragover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.drop-overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    pointer-events: none;
+}
+
+.editor-container.dragover .drop-overlay {
+    display: flex;
+}
+
+
